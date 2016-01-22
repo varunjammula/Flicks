@@ -10,8 +10,9 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     var movies : [NSDictionary]?
     var selectedmovie : NSDictionary?
@@ -27,6 +28,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             collectionView.insertSubview(refreshControl, atIndex: 0)
             collectionView.dataSource = self
             collectionView.delegate = self
+            searchBar.delegate = self
+            print("Aweseome !")
             
         } else {
             self.view.hidden = true
@@ -107,13 +110,23 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
     }
     
-    /*override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "detailsSegue", let destination = segue.destinationViewController as? DetailsViewController {
-            if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPathForCell(cell) {
-                destination.title = (movies![indexPath.row])["title"] as? String
-            }
-        }
-    }*/
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.text = ""
+        view.endEditing(true)
+    }
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchBar.text)
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
     
 }
 
