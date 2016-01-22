@@ -15,6 +15,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     var movies : [NSDictionary]?
+    var filteredmovies : [NSDictionary]?
     var selectedmovie : NSDictionary?
     let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
     
@@ -29,7 +30,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             collectionView.dataSource = self
             collectionView.delegate = self
             searchBar.delegate = self
-            print("Aweseome !")
             
         } else {
             self.view.hidden = true
@@ -59,6 +59,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
                             self.movies = responseDictionary["results"] as? [NSDictionary]
+                            self.filteredmovies = self.movies
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                             self.collectionView.reloadData()
                     }
@@ -73,7 +74,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            if let movies = movies {
+            if let movies = filteredmovies {
                 return movies.count
             } else {
                 return 0;
@@ -82,7 +83,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("com.vjammula.MovieCollection", forIndexPath: indexPath) as! MovieCellCollection
-        let movie = movies![indexPath.row]
+        let movie = filteredmovies![indexPath.row]
         if let posterPath = movie["poster_path"] as? String {
             let posterUrl = NSURL(string: posterBaseUrl + posterPath)
             cell.imageView.setImageWithURL(posterUrl!)
@@ -105,7 +106,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         print (indexPath.row)
-        selectedmovie = movies![indexPath.row];
+        selectedmovie = filteredmovies![indexPath.row];
         self.performSegueWithIdentifier("detailsSegue", sender: self)
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
     }
@@ -120,7 +121,11 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchBar.text)
+        
+            filteredmovies = searchText.isEmpty ? movies : movies!.filter({(dataString: NSDictionary) -> Bool in
+            return (dataString["title"] as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+        })
+        collectionView.reloadData()
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
