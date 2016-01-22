@@ -17,14 +17,19 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var selectedmovie : NSDictionary?
     let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.fetchData()
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
-        tableView.insertSubview(refreshControl, atIndex: 0)
-        tableView.dataSource = self
-        tableView.delegate = self
+        if(Reachability.isConnectedToNetwork()) {
+            self.fetchData()
+            let refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+            tableView.insertSubview(refreshControl, atIndex: 0)
+            tableView.dataSource = self
+            tableView.delegate = self
+        } else {
+            self.view.hidden = true
+        }
         
     }
 
