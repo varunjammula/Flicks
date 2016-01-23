@@ -30,7 +30,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             collectionView.dataSource = self
             collectionView.delegate = self
             searchBar.delegate = self
-            
+            filteredmovies = movies
         } else {
             self.view.hidden = true
         }
@@ -86,7 +86,29 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         let movie = filteredmovies![indexPath.row]
         if let posterPath = movie["poster_path"] as? String {
             let posterUrl = NSURL(string: posterBaseUrl + posterPath)
-            cell.imageView.setImageWithURL(posterUrl!)
+            let imageRequest = NSURLRequest(URL: posterUrl!)
+            cell.imageView.setImageWithURLRequest(
+                imageRequest,
+                placeholderImage: nil,
+                success: { (imageRequest, imageResponse, image) -> Void in
+                    
+                    // imageResponse will be nil if the image is cached
+                    if imageResponse != nil {
+                        print("Image was NOT cached, fade in image")
+                        cell.imageView.alpha = 0.0
+                        cell.imageView.image = image
+                        UIView.animateWithDuration(0.3, animations: { () -> Void in
+                            cell.imageView.alpha = 1.0
+                        })
+                    } else {
+                        print("Image was cached so just update the image")
+                        cell.imageView.image = image
+                    }
+                },
+                failure: { (imageRequest, imageResponse, error) -> Void in
+                    // do something for the failure condition
+            })
+            //cell.imageView.setImageWithURL(posterUrl!)
         }
         else {
             // No poster image. Can either set to nil (no image) or a default movie poster image
