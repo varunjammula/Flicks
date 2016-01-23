@@ -30,7 +30,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             collectionView.dataSource = self
             collectionView.delegate = self
             searchBar.delegate = self
-            filteredmovies = movies
         } else {
             self.view.hidden = true
         }
@@ -136,6 +135,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.text = ""
         view.endEditing(true)
+        filteredmovies = movies
+        collectionView.reloadData()
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
