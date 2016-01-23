@@ -12,6 +12,8 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
+    @IBOutlet weak var networkButton: UIButton!
+    @IBOutlet weak var networkView: UIView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     var movies : [NSDictionary]?
@@ -23,19 +25,24 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         if(Reachability.isConnectedToNetwork()) {
-            self.fetchData()
-            let refreshControl = UIRefreshControl()
-            refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
-            collectionView.insertSubview(refreshControl, atIndex: 0)
-            collectionView.dataSource = self
-            collectionView.delegate = self
-            searchBar.delegate = self
+                self.initalize()
         } else {
-            self.view.hidden = true
+            networkView.hidden = false
+            //self.view.hidden = true
         }
         
     }
-
+    func initalize() {
+        networkView.hidden = true
+        self.fetchData()
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        collectionView.insertSubview(refreshControl, atIndex: 0)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        searchBar.delegate = self
+    }
+    
     func refreshControlAction(refreshControl: UIRefreshControl) {
         print("Refreshing data....")
         self.fetchData()
@@ -155,6 +162,13 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
+    @IBAction func onClick(sender: AnyObject) {
+        print("Button Clicked!")
+        if(Reachability.isConnectedToNetwork()) {
+            self.initalize()
+        }
+        //self.viewDidLoad()
+    }
     
 }
 
