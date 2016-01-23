@@ -18,7 +18,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     @IBOutlet weak var collectionView: UICollectionView!
     var movies : [NSDictionary]?
     var filteredmovies : [NSDictionary]?
-    var selectedmovie : NSDictionary?
+    var selectedmovie : NSDictionary!
     let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
     
     
@@ -28,8 +28,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         nav.barStyle = UIBarStyle.Black
         nav.tintColor = UIColor.whiteColor()
         nav.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.orangeColor()]
-        let textFieldInsideSearchBar = searchBar.valueForKey("searchField") as? UITextField
-        textFieldInsideSearchBar?.textColor = UIColor.blackColor()
         if(Reachability.isConnectedToNetwork()) {
                 self.initalize()
         } else {
@@ -133,9 +131,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "detailsSegue" {
             let controller = segue.destinationViewController as! DetailsViewController;
-            controller.title = selectedmovie!["title"] as? String
-            controller.overViewtext = selectedmovie!["overview"] as? String
-            controller.imageUrl = NSURL(string: posterBaseUrl + (selectedmovie!["backdrop_path"] as? String)!)
+            controller.selectedMovie = self.selectedmovie
+            
         }
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

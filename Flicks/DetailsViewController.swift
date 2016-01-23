@@ -11,21 +11,32 @@ import AFNetworking
 
 class DetailsViewController: UIViewController {
     
+    @IBOutlet weak var ratingsLabel: UILabel!
+
     
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var overView: UILabel!
-    var overViewtext : String!
-    var imageUrl : NSURL!
+    
+    var overViewtext : String?
+    var imageUrl : String?
+    var posterUrl : NSURL?
+    var popularity : Double?
+    var ratings : Double?
+    var selectedMovie : NSDictionary!
+    var posterBaseUrl = "http://image.tmdb.org/t/p/w500"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nav = self.navigationController!.navigationBar
-        nav.barStyle = UIBarStyle.Black
-        nav.tintColor = UIColor.whiteColor()
-        nav.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.orangeColor()]
         // Do any additional setup after loading the view.
-        overView.text = overViewtext
-        backgroundImage.setImageWithURL(imageUrl);
-        //backgroundImage.alpha = 0.1
+        overView.text = selectedMovie["overview"] as? String
+        imageUrl = selectedMovie["backdrop_path"] as? String
+        if(imageUrl == nil) {
+            backgroundImage.setImageWithURL(NSURL(string: posterBaseUrl + (selectedMovie["poster_path"] as? String)!)!)
+        } else {
+            backgroundImage.setImageWithURL(NSURL(string: posterBaseUrl + imageUrl!)!)
+        }
+        ratingsLabel.text = " " + String(selectedMovie["vote_average"]!) + " / 10.0"
+        
     }
     
     override func didReceiveMemoryWarning() {
