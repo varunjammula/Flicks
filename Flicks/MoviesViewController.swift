@@ -24,6 +24,12 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let nav = self.navigationController!.navigationBar
+        nav.barStyle = UIBarStyle.Black
+        nav.tintColor = UIColor.whiteColor()
+        nav.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.orangeColor()]
+        let textFieldInsideSearchBar = searchBar.valueForKey("searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = UIColor.blackColor()
         if(Reachability.isConnectedToNetwork()) {
                 self.initalize()
         } else {
@@ -129,7 +135,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             let controller = segue.destinationViewController as! DetailsViewController;
             controller.title = selectedmovie!["title"] as? String
             controller.overViewtext = selectedmovie!["overview"] as? String
-            controller.imageUrl = NSURL(string: posterBaseUrl + (selectedmovie!["poster_path"] as? String)!)
+            controller.imageUrl = NSURL(string: posterBaseUrl + (selectedmovie!["backdrop_path"] as? String)!)
         }
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

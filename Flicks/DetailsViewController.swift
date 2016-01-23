@@ -18,10 +18,14 @@ class DetailsViewController: UIViewController {
     var imageUrl : NSURL!
     override func viewDidLoad() {
         super.viewDidLoad()
+        let nav = self.navigationController!.navigationBar
+        nav.barStyle = UIBarStyle.Black
+        nav.tintColor = UIColor.whiteColor()
+        nav.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.orangeColor()]
         // Do any additional setup after loading the view.
         overView.text = overViewtext
         backgroundImage.setImageWithURL(imageUrl);
-        backgroundImage.alpha = 0.1
+        //backgroundImage.alpha = 0.1
     }
     
     override func didReceiveMemoryWarning() {
