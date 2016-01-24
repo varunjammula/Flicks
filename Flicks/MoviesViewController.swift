@@ -12,10 +12,16 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
-    @IBOutlet weak var networkButton: UIButton!
     @IBOutlet weak var networkView: UIView!
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
+    //@IBOutlet weak var networkButton: UIButton!
+    //@IBOutlet weak var networkView: UIView!
+    //@IBOutlet weak var searchBar: UISearchBar!
+    //@IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    //@IBOutlet weak var collectionView: UICollectionView!
     var movies : [NSDictionary]?
     var filteredmovies : [NSDictionary]?
     var selectedmovie : NSDictionary!
@@ -166,12 +172,18 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     @IBAction func onClick(sender: AnyObject) {
-        print("Button Clicked!")
+        print("Trying to reconnect..")
         if(Reachability.isConnectedToNetwork()) {
             self.initalize()
         }
-        //self.viewDidLoad()
     }
+//    @IBAction func onClick(sender: AnyObject) {
+//        print("Button Clicked!")
+//        if(Reachability.isConnectedToNetwork()) {
+//            self.initalize()
+//        }
+//        //self.viewDidLoad()
+//    }
     
 }
 
