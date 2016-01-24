@@ -13,6 +13,7 @@ class DetailsViewController: UIViewController {
     
     @IBOutlet weak var ratingsLabel: UILabel!
 
+    @IBOutlet weak var popularityLabel: UILabel!
     
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var overView: UILabel!
@@ -35,8 +36,10 @@ class DetailsViewController: UIViewController {
         } else {
             backgroundImage.setImageWithURL(NSURL(string: posterBaseUrl + imageUrl!)!)
         }
-        ratingsLabel.text = " " + String(selectedMovie["vote_average"]!) + " / 10.0"
-        
+        ratings = selectedMovie["vote_average"]! as? Double
+        popularity = selectedMovie["popularity"]! as? Double
+        ratingsLabel.text = " " + String(format: "%.2f", ratings!) + " / 10.0"
+        popularityLabel.text = " " + String(format: "%.2f", popularity!) + " % "
     }
     
     override func didReceiveMemoryWarning() {
