@@ -29,6 +29,7 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.navigationItem.title = selectedMovie["title"] as? String
         overView.text = selectedMovie["overview"] as? String
         imageUrl = selectedMovie["backdrop_path"] as? String
         if(imageUrl == nil) {
