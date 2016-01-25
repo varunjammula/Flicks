@@ -38,7 +38,7 @@ class DetailsViewController: UIViewController {
         }
         ratings = selectedMovie["vote_average"]! as? Double
         popularity = selectedMovie["popularity"]! as? Double
-        ratingsLabel.text = " " + String(format: "%.2f", ratings!) + " / 10.0"
+        ratingsLabel.text = " " + String(format: "%.2f", ratings!) + " "
         popularityLabel.text = " " + String(format: "%.2f", popularity!) + " % "
     }
     
